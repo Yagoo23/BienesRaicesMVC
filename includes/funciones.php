@@ -2,7 +2,7 @@
 
 define('TEMPLATES_URL', __DIR__ . '/templates');
 define('FUNCIONES_URL', __DIR__ . 'funciones.php');
-define('CARPETAS_IMAGENES',__DIR__ . '/../imagenes/');
+define('CARPETAS_IMAGENES', $_SERVER['DOCUMENT_ROOT'] . '/imagenes/');
 
 function incluirTemplate(string $nombre, bool $inicio = false)
 {
@@ -27,23 +27,26 @@ function debuguear($variable)
 }
 
 //Escapa/Sanitizar el HTML
-function s($html):string{
+function s($html): string
+{
     $s = htmlspecialchars($html);
     return $s;
 }
 
 //Validar tipo de contenido
-function validarTipoContenido($tipo){
-    $tipos = ['propiedad','vendedor'];
+function validarTipoContenido($tipo)
+{
+    $tipos = ['propiedad', 'vendedor'];
 
-    return in_array($tipo,$tipos);
+    return in_array($tipo, $tipos);
 }
 
 //Muestra los mensajes
-function mostrarNotificacion($codigo){
+function mostrarNotificacion($codigo)
+{
     $mensaje = '';
 
-    switch($codigo){
+    switch ($codigo) {
         case 1:
             $mensaje = 'Creado correctamente';
             break;
@@ -52,10 +55,22 @@ function mostrarNotificacion($codigo){
             break;
         case 3:
             $mensaje = 'Eliminado correctamente';
-            break;   
+            break;
         default:
             $mensaje = false;
-            break;         
+            break;
     }
     return $mensaje;
+}
+
+function validarORedireccionar(string $url)
+{
+    //Validar por id válido
+    $id = $_GET['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    if (!$id) {
+        header("Location: ${url}");
+    }
+    return $id;
 }
